@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "286667112900",
+    "project_id": "g-erp-1b74b",
+    "storage_bucket": "g-erp-1b74b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:286667112900:android:311d4fa90ddfa1ee656491",
+        "android_client_info": {
+          "package_name": "com.example.gluon_erp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "286667112900-cf31lejc6b6fbfq8fgu4dgm3q4nbup96.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkbdoegbfyeKQ0fq7BeIYW7EDgwTBzaxU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "286667112900-cf31lejc6b6fbfq8fgu4dgm3q4nbup96.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
