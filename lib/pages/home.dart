@@ -7,7 +7,7 @@ import 'package:gluon_erp/Controllers/home_controller.dart';
 import 'package:gluon_erp/constants/assets/app_icons.dart';
 import 'package:gluon_erp/widgets/approvals_card.dart';
 import 'package:gluon_erp/widgets/custom_app_bar.dart';
-import 'package:gluon_erp/widgets/dialogs/filter_dialog.dart';
+import 'package:gluon_erp/widgets/custom_drawer.dart';
 import 'package:gluon_erp/widgets/dialogs/remarks_dialog.dart';
 import 'package:gluon_erp/widgets/home_bar.dart';
 import 'package:sizer/sizer.dart';
@@ -20,11 +20,16 @@ class HomePage extends StatelessWidget {
     return GetBuilder<HomePageController>(
       init: HomePageController(),
       builder: (controller) => Scaffold(
+        key: controller.scaffoldKey,
+        drawer: const CustomDrawer(),
         appBar: CustomAppBar(
-            title: 'Approvals',
-            showLogoutIcon: true,
-            actionIconPath: AppIcons.filter,
-            onActionTap: controller.onFilterIconTap,),
+          leadingIcon: Icons.menu_outlined,
+          onLeadingIconTap: () =>
+              controller.scaffoldKey.currentState?.openDrawer(),
+          title: 'Approvals',
+          actionIconPath: AppIcons.filter,
+          onActionTap: controller.onFilterIconTap,
+        ),
         body: DefaultTabController(
           length: 3,
           child: Padding(
@@ -38,6 +43,7 @@ class HomePage extends StatelessWidget {
                   backgroundColor: AppColors.lightGrey,
                   controller: controller.tfSearch,
                   onChanged: (_) => controller.update(),
+                  focusNode: controller.searchFocusNode,
                 ),
                 SizedBox(height: 12.sp),
                 // Text(
@@ -104,10 +110,9 @@ class HomePage extends StatelessWidget {
                     ],
                   ),
                 Expanded(
-                  child: ListView.builder(
+                  child: ListView.separated(
                     itemCount: controller.activeList.length,
                     itemBuilder: (BuildContext context, int index) {
-                      print(controller.activeList[index].docNo);
                       return (controller.tfSearch.text.isEmpty ||
                               (controller.activeList[index].docNo ?? "")
                                   .toLowerCase()
@@ -119,6 +124,8 @@ class HomePage extends StatelessWidget {
                             )
                           : const SizedBox.shrink();
                     },
+                    separatorBuilder: (BuildContext context, int index) =>
+                        const SizedBox.shrink(),
                   ),
                 ),
               ],

@@ -14,6 +14,9 @@ class LoginPageController extends GetxController with DropDownListMixin {
   late TextEditingController tfEmail, tfPassword;
   final GlobalKey<FormState> loginFormKey = GlobalKey();
 
+  final FocusNode emailFocusNode = FocusNode();
+  final FocusNode passwordFocusNode = FocusNode();
+
   @override
   void onInit() {
     _initializeFields();
@@ -40,6 +43,7 @@ class LoginPageController extends GetxController with DropDownListMixin {
         getFiltersData();
         userId = loginResponse.userId;
         _saveLoginResponseToLocalStorage(loginResponse);
+        _saveUserEmail();
         Get.off(() => const HomePage());
       }
     }
@@ -50,4 +54,10 @@ class LoginPageController extends GetxController with DropDownListMixin {
 
   void _saveLoginResponseToLocalStorage(LoginModel loginModel) =>
       box.write(AppKeys.loginResponse, loginModel.toJson());
+
+  void _saveUserEmail(){
+    email = tfEmail.text.trim();
+    box.write(AppKeys.email, email);
+
+  }
 }

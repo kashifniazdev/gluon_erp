@@ -15,7 +15,12 @@ import 'package:gluon_erp/services/urls.dart';
 import 'package:gluon_erp/widgets/dialogs/filter_dialog.dart';
 import 'dart:io';
 import 'package:gluon_erp/widgets/dialogs/remarks_dialog.dart';
-import 'package:path_provider/path_provider.dart';
+import 'package:lecle_downloads_path_provider/lecle_downloads_path_provider.dart';
+import 'package:open_file_plus/open_file_plus.dart';
+
+// import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as path;
+import 'package:permission_handler/permission_handler.dart';
 
 class HomePageController extends GetxController {
   int _pageIndex = 0;
@@ -35,6 +40,9 @@ class HomePageController extends GetxController {
 
   FilterDataModel filterData = FilterDataModel();
   bool isSelectionModeActive = false, isEveryApprovalSelected = false;
+
+  final FocusNode searchFocusNode = FocusNode();
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   late final TextEditingController tfRemarks, tfSearch;
 
@@ -65,8 +73,12 @@ class HomePageController extends GetxController {
   }
 
   void onHomeBarSelection(int value) async {
+    if (searchFocusNode.hasFocus) {
+      searchFocusNode.unfocus();
+    }
     if (value != _pageIndex) {
       _pageIndex = value;
+      isSelectionModeActive = false;
       await _fetchApprovalsFromApi();
       activeList = _getActiveList();
       update();
@@ -128,6 +140,7 @@ class HomePageController extends GetxController {
         model: ApprovalModel());
     if (apiResponse != null) {
       tfRemarks.clear();
+      isSelectionModeActive = false;
       Get.back();
       onReady();
     }
@@ -208,23 +221,51 @@ class HomePageController extends GetxController {
           ? _approvedApprovalList
           : _rejectedApprovalList;
 
-  Future<void> _saveBase64AsPDF(String base64String, int approvalId) async {
+  Future<void> _saveBase64AsPDF(
+      String base64String, int approvalId, String formName) async {
     final Uint8List bytes = base64.decode(base64String);
 
-    final dir = Platform.isAndroid
-        ? await getExternalStorageDirectory() //FOR ANDROID
-        : await getApplicationSupportDirectory();
-    final file = File('${dir?.path}/$approvalId.pdf');
-    print(dir);
+    Directory? mediaDir = await DownloadsPath.downloadsDirectory();
+    String documentsDirPath = mediaDir?.path ?? '';
+    documentsDirPath =
+        path.join(mediaDir!.path, 'Gluon Approvals', 'Documents');
+    Directory documentsDir = Directory(documentsDirPath);
 
-    await file.writeAsBytes(bytes, flush: true);
-    Utilities.showSuccessMessage(message: "File Saved to $dir");
+    if (!await documentsDir.exists()) {
+      await documentsDir.create(recursive: true);
+    }
+
+    String filename = '$formName-$approvalId.pdf';
+
+    // Save the bytes to a PDF file in the media directory
+    String filePath = path.join(documentsDirPath, filename);
+
+    await File(filePath).writeAsBytes(bytes, flush: true);
+
+    OpenFile.open(filePath);
   }
 
   void fetchBase64FromAPI(int approvalId, String formName) async {
     String base64String = await apiCall(GET,
         "${Urls.getPDF}$approvalId&form=SalesInvoice&PrintName=Default", {});
-    print(base64String);
-    _saveBase64AsPDF(base64String,approvalId);
+
+    _saveBase64AsPDF(base64String, approvalId, formName);
   }
+
+// Future<bool> _handleStoragePermission() async {
+//   print("permission");
+//   Map<Permission, PermissionStatus> status = await [
+//     Permission.storage,
+//   ].request();
+//   print("permission requested $status");
+//   if (status[Permission.storage] != PermissionStatus.granted) {
+//     print("permission false");
+//     // Permission not granted, handle accordingly
+//     return true;
+//   }
+//   print("permission true");
+//   return true;
+// }
+
+  int getSelectedApprovalDocLength() => _selectedApprovalList.length;
 }

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:gluon_erp/Constants/app_colors.dart';
 import 'package:gluon_erp/Constants/utilities.dart';
 import 'package:gluon_erp/Controllers/home_controller.dart';
+import 'package:gluon_erp/utils/extensions/date_time_extension.dart';
 import 'package:gluon_erp/widgets/custom_button.dart';
 import 'package:gluon_erp/widgets/custom_text_field.dart';
 import 'package:sizer/sizer.dart';
@@ -24,14 +25,14 @@ class RemarksDialog extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "SI-0013",
+                  "${controller.getSelectedApprovalDocLength()} Document${controller.getSelectedApprovalDocLength() > 1 ? 's' : ''} selected",
                   style: Utilities.setTextStyle(
-                    14.sp,
+                    10.sp,
                     FontWeight.w600,
                   ),
                 ),
                 Text(
-                  "10-May-22",
+                  DateTime.now().toFormattedString(),
                   style: Utilities.setTextStyle(
                     14.sp,
                     FontWeight.w600,
@@ -39,7 +40,7 @@ class RemarksDialog extends StatelessWidget {
                 ),
               ],
             ),
-           // SizedBox(height: 4.sp),
+            // SizedBox(height: 4.sp),
             CustomTextField(
               hint: "Remarks....",
               hintTextColor: AppColors.textGrey80,
@@ -56,7 +57,8 @@ class RemarksDialog extends StatelessWidget {
                   flex: 3,
                   child: CustomButton(
                     title: "Reject",
-                    onTap: ()=>controller.changeSelectedApprovalStatus(isApprovalAccepted: false),
+                    onTap: () => controller.changeSelectedApprovalStatus(
+                        isApprovalAccepted: false),
                   ),
                 ),
                 Spacer(),
@@ -64,7 +66,8 @@ class RemarksDialog extends StatelessWidget {
                   flex: 3,
                   child: CustomButton(
                     title: "Approve",
-                    onTap: ()=>controller.changeSelectedApprovalStatus(isApprovalAccepted:true),
+                    onTap: () => controller.changeSelectedApprovalStatus(
+                        isApprovalAccepted: true),
                   ),
                 ),
               ],

@@ -26,7 +26,7 @@ class CustomTextField extends StatelessWidget {
     this.onSuffixTap,
     this.maxLines,
     this.borderColor = AppColors.textGrey80,
-    this.verticalPadding = 8,
+    this.verticalPadding = 8, this.keyboardType, this.onFieldSubmitted, this.focusNode,
   }) : super(key: key);
 
   final String hint;
@@ -45,6 +45,9 @@ class CustomTextField extends StatelessWidget {
   final VoidCallback? onSuffixTap;
   final int? maxLines;
   final double verticalPadding;
+  final TextInputType? keyboardType;
+  final Function(String)? onFieldSubmitted;
+  final FocusNode? focusNode;
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +70,10 @@ class CustomTextField extends StatelessWidget {
           TextFormField(
             controller: controller,
             onChanged: onChanged,
+            onFieldSubmitted: onFieldSubmitted,
+            focusNode: focusNode,
             textCapitalization: textCapitalization,
+            keyboardType: keyboardType,
             obscureText: isPasswordField,
             readOnly: readOnly,
             enabled: enabled,

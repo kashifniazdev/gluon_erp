@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:gluon_erp/Constants/app_colors.dart';
 import 'package:gluon_erp/Constants/utilities.dart';
+import 'package:gluon_erp/Controllers/home_controller.dart';
 import 'package:gluon_erp/Widgets/custom_loader.dart';
+import 'package:gluon_erp/constants/assets/app_icons.dart';
 import 'package:gluon_erp/controllers/document_info_controller.dart';
 import 'package:gluon_erp/models/approval_model.dart';
 import 'package:gluon_erp/widgets/buttons/custom_border_button.dart';
@@ -20,9 +23,13 @@ class DocumentInfoPage extends StatelessWidget {
     return GetBuilder<DocumentInfoPageController>(
       init: DocumentInfoPageController(data),
       builder: (controller) => Scaffold(
-        appBar: const CustomAppBar(
+        appBar: CustomAppBar(
           title: "Document Info",
           showBackButton: true,
+          actionIconPath: AppIcons.download,
+          onActionTap: () => Get.put(HomePageController())
+              .fetchBase64FromAPI(data.approvalId ?? -1, data.form?.name ?? ''),
+          // showDownloadIcon: true,
         ),
         body: SingleChildScrollView(
           child: controller.approvalDetail != null

@@ -6,18 +6,18 @@ import 'package:gluon_erp/constants/assets/app_icons.dart';
 import 'package:sizer/sizer.dart';
 
 class CustomDropDownFiled extends StatelessWidget {
-  const CustomDropDownFiled({
-    Key? key,
-    required this.controller,
-    required this.dropDownList,
-    this.hint,
-    this.onChange,
-    this.fillColor,
-    this.borderColor,
-    this.title,
-    this.dropDownIcon,
-    this.initialValue
-  }) : super(key: key);
+  const CustomDropDownFiled(
+      {Key? key,
+      required this.controller,
+      required this.dropDownList,
+      this.hint,
+      this.onChange,
+      this.fillColor,
+      this.borderColor,
+      this.title,
+      this.dropDownIcon,
+      this.initialValue})
+      : super(key: key);
 
   final SingleValueDropDownController controller;
   final List<DropDownValueModel> dropDownList;
@@ -43,7 +43,6 @@ class CustomDropDownFiled extends StatelessWidget {
         //     ],
         //   ),
         DropDownTextField(
-
           initialValue: initialValue,
           controller: controller,
           clearOption: false,
@@ -54,9 +53,9 @@ class CustomDropDownFiled extends StatelessWidget {
             size: 24.sp,
           ),
 
-
           textFieldDecoration: InputDecoration(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+            contentPadding:
+                const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
 
             filled: true,
             fillColor: fillColor ?? Colors.white,

@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 
 import '../Constants/utilities.dart';
 import 'dart:io';
+import 'package:connectivity_plus/connectivity_plus.dart';
 
 const String GET = "GET";
 const String POST = "POST";
@@ -18,12 +19,18 @@ const String UPDATE = "UPDATE";
 const String DELETE = "DELETE";
 const String PATCH = "PATCH";
 
-Future<dynamic> apiCall(
-    String method, String endPoint, var dataMap,
+Future<dynamic> apiCall(String method, String endPoint, var dataMap,
     {var model, bool showLoader = true, File? file}) async {
+  final connectivityResult = await Connectivity().checkConnectivity();
+  if (connectivityResult == ConnectivityResult.none) {
+    Utilities.showErrorMessage(
+        error:
+            'You are not connected with internet, please check your connection and try again');
+    return null;
+  }
   if (showLoader) Get.dialog(const CustomLoader());
 
-   log(authToken);
+  log(authToken);
 
   try {
     var headers = {
@@ -47,13 +54,12 @@ Future<dynamic> apiCall(
 
     http.StreamedResponse response = await request.send();
 
-     log("statusCode: " + response.statusCode.toString());
+    log("statusCode: " + response.statusCode.toString());
     String? data = await response.stream.bytesToString();
     final decodedResponse = json.decode(data);
-     log("decodedResponse $decodedResponse");
+    log("decodedResponse $decodedResponse");
 
     final BaseModel baseModel = BaseModel.fromJson(decodedResponse);
-
 
     var result;
     if (response.statusCode == 200 && (baseModel.success ?? false)) {
@@ -79,6 +85,8 @@ Future<dynamic> apiCall(
     if (showLoader) Get.back();
     Utilities.showErrorMessage(error: baseModel.error?.message);
     if (response.statusCode == 500 && baseModel.error?.code == 0) {
+      authToken = "";
+      box.erase();
       Get.offAll(() => const LoginPage());
     }
     return null;

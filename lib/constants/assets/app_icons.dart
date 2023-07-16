@@ -5,6 +5,7 @@ class AppIcons {
   static const String email = "assets/icons/email.png";
   static const String filter = "assets/icons/filter.png";
   static const String lock = "assets/icons/lock.png";
+  static const String logout = "assets/icons/logout.png";
   static const String search = "assets/icons/search.png";
 
 }

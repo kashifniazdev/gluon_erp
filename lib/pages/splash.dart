@@ -13,12 +13,10 @@ class SplashPage extends StatelessWidget {
       init: SplashPageController(),
       builder: (controller) => Scaffold(
           body: Center(
-        child: controller.appStatus
-            ? Image.asset(
+        child:Image.asset(
                 AppImages.logo,
                 width: 80.w,
-              )
-            : Text(controller.message),
+              ),
       )),
     );
   }

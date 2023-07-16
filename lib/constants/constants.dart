@@ -3,6 +3,7 @@ import 'package:gluon_erp/models/filters/company_model.dart';
 
 final GetStorage box = GetStorage();
 String authToken = "";
+String email = "";
 int? userId;
 
 List<FilterModel> companyList = [];

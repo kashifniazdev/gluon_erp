@@ -17,9 +17,9 @@ class LoginPage extends StatelessWidget with TextFieldValidator {
   Widget build(BuildContext context) {
     return GetBuilder<LoginPageController>(
       init: LoginPageController(),
-      builder: (controller) => SafeArea(
-        child: Scaffold(
-          body: SingleChildScrollView(
+      builder: (controller) => Scaffold(
+        body: SafeArea(
+          child: SingleChildScrollView(
             child: Padding(
               padding:  EdgeInsets.all(20.0.sp),
               child: Form(
@@ -58,9 +58,15 @@ class LoginPage extends StatelessWidget with TextFieldValidator {
                     SizedBox(height: 20.sp),
                     CustomTextField(
                       hint: "Email",
+                      keyboardType: TextInputType.emailAddress,
                       prefixIcon: AppIcons.email,
                       validator: validateEmail,
                       controller: controller.tfEmail,
+                      onFieldSubmitted: (_) {
+                        // Move focus to the password field when the email field is submitted
+                        FocusScope.of(context).requestFocus(controller.passwordFocusNode);
+                      },
+                      focusNode: controller.emailFocusNode,
                     ),
                     SizedBox(height: 20.sp),
                     CustomTextField(
@@ -69,6 +75,7 @@ class LoginPage extends StatelessWidget with TextFieldValidator {
                       prefixIcon: AppIcons.lock,
                       isPasswordField: true,
                       controller: controller.tfPassword,
+                      focusNode: controller.passwordFocusNode,
                     ),
                     SizedBox(height: 30.sp),
                     CustomButton(title: "Login", onTap: controller.onLogin)

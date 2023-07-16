@@ -41,6 +41,7 @@ class ApprovalsCard extends StatelessWidget {
                   value: data.isSelected,
                   onChanged: (value) => controller.onApproveTap(data),
                 ),
+             const SizedBox(width: 10),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +92,7 @@ class ApprovalsCard extends StatelessWidget {
                 ),
               ),
               Container(
-                height: 40.sp,
+                height: 48.sp,
                 width: 5.sp,
                 decoration: BoxDecoration(
                   borderRadius:
@@ -111,11 +112,3 @@ class ApprovalsCard extends StatelessWidget {
   }
 }
 
-class _BuildStatusIndicator extends StatelessWidget {
-  const _BuildStatusIndicator({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}

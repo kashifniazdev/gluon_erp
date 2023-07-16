@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:get/get.dart';
 import 'package:gluon_erp/Pages/home.dart';
 import 'package:gluon_erp/constants/app_keys.dart';
@@ -8,14 +8,13 @@ import 'package:gluon_erp/pages/login.dart';
 import 'package:gluon_erp/utils/mixins/drop_down_list.dart';
 
 class SplashPageController extends GetxController with DropDownListMixin {
-  bool appStatus = true;
+
   String message = '';
 
   @override
   void onReady() async {
-    await _checkAppStatus();
-    Future.delayed(const Duration(seconds: 0), () {
-      if (appStatus) _getLoginResponseFromLocalStorage();
+    Future.delayed(const Duration(seconds: 1), () {
+       _getLoginResponseFromLocalStorage();
     });
     super.onReady();
   }
@@ -26,6 +25,7 @@ class SplashPageController extends GetxController with DropDownListMixin {
       LoginModel loginResponse = LoginModel().fromJson(data);
       authToken = loginResponse.accessToken;
       userId = loginResponse.userId;
+      _getEmailFromLocalStorage();
     }
     getFiltersData();
     Future.delayed(const Duration(seconds: 2), () {
@@ -39,16 +39,12 @@ class SplashPageController extends GetxController with DropDownListMixin {
         : Get.off(() => const LoginPage());
   }
 
-  Future<void> _checkAppStatus() async {
-    await FirebaseFirestore.instance
-        .collection("erp")
-        .doc("validate")
-        .get()
-        .then((value) {
-      appStatus = value.data()?["status"] ?? true;
-      message = value.data()?["message"] ?? "";
-    });
-
-    update();
+  void _getEmailFromLocalStorage(){
+    final data = box.read(AppKeys.email);
+    if (data != null) {
+      email = data;
+    }
   }
+
+
 }

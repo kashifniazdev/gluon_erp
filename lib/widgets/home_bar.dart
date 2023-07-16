@@ -5,7 +5,7 @@ import 'package:gluon_erp/constants/enums.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sizer/sizer.dart';
 
-class HomeBar extends StatelessWidget with PreferredSizeWidget {
+class HomeBar extends StatelessWidget implements PreferredSizeWidget {
   const HomeBar({
     Key? key,
     required this.onSelect,
